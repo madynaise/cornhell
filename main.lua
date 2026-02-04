@@ -13,12 +13,11 @@ function love.load()
   
   gun = {}
   gun.x = corn.x + 90
-  gun.y = corn.y + 30
+  gun.y = corn.y + 50
   gun.r = 0
   gun.spr = love.graphics.newImage("art/gun.png")
   
   bullets = {}
-  
   
 end
 
@@ -129,15 +128,25 @@ function love.update(dt)
   
   --gun
   gun.x = corn.x + 90
-  gun.y = corn.y + 30
+  gun.y = corn.y + 50
   gun.r = math.atan2(dy, dx)
   
   --end(stuff that has to be at the end)
   if corn.xv > 50 then
-    corn.xv = 30
+    corn.xv = 50
   end
   
+  if corn.yv > 50 then
+    corn.yv = 50
+  end
   
+  if corn.xv < -50 then
+    corn.xv = -50
+  end
+  
+  if corn.yv < -50 then
+    corn.yv = -50
+  end
 end
 
 
@@ -148,5 +157,9 @@ function love.draw()
   
   --gun
   love.graphics.setColor(1,1,1,1)
-  love.graphics.draw(gun.spr,gun.x,gun.y,gun.r,10,10,0,2)
+  love.graphics.draw(gun.spr,gun.x,gun.y,gun.r,10,10,0,3)
+end
+
+function shoot()
+  
 end
