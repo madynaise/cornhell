@@ -126,11 +126,24 @@ function love.update(dt)
     corn.y = 519
   end
   
-  --gun
+  --gun and bullet
   gun.x = corn.x + 90
   gun.y = corn.y + 50
   gun.r = math.atan2(dy, dx)
   
+  --if love.mouse.isDown(1) then
+    --shoot()
+  --end
+  
+  function love.mousepressed()
+    shoot()
+  end
+  
+  for i, bullet in ipairs(bullets) do
+    bullet.x = bullet.x + math.cos(bullet.r) * 1000 * dt
+    bullet.y = bullet.y + math.sin(bullet.r) * 1000 * dt
+  end
+
   --end(stuff that has to be at the end)
   if corn.xv > 50 then
     corn.xv = 50
@@ -150,6 +163,7 @@ function love.update(dt)
 end
 
 
+
 function love.draw()
   --corn
   love.graphics.setColor(1,1,1,1)
@@ -158,8 +172,21 @@ function love.draw()
   --gun
   love.graphics.setColor(1,1,1,1)
   love.graphics.draw(gun.spr,gun.x,gun.y,gun.r,10,10,0,3)
+  
+  --bullet
+  for i,bullet in ipairs(bullets) do
+    love.graphics.setColor(0.9,0,0,1)
+    love.graphics.circle("fill",bullet.x,bullet.y,20)
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.circle("fill",bullet.x,bullet.y,14)
+  end
+  
 end
 
 function shoot()
+  bullet = {
+    x = gun.x, y = gun.y, r = gun.r
+  }
   
+  table.insert(bullets, bullet)
 end
