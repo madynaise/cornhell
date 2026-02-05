@@ -19,6 +19,8 @@ function love.load()
   
   bullets = {}
   
+  monsters = {}
+  createmon()
 end
 
 
@@ -140,10 +142,26 @@ function love.update(dt)
   end
   
   for i, bullet in ipairs(bullets) do
-    bullet.x = bullet.x + math.cos(bullet.r) * 1000 * dt
-    bullet.y = bullet.y + math.sin(bullet.r) * 1000 * dt
+    bullet.x = bullet.x + math.cos(bullet.r) * 900 * dt
+    bullet.y = bullet.y + math.sin(bullet.r) * 900 * dt
   end
 
+  --monster
+  if love.keyboard.isDown("y") then
+    createmon()
+  end
+  
+
+  for mi, monster in ipairs(monsters) do
+    for bi, bullet in ipairs(bullets) do
+      if bullet.x + 10 > monster.x and bullet.x - 10 < monster.x + 80 then
+        if bullet.y - 10 > monster.y and bullet.y + 10 < monster.y + 80 then
+          table.remove(monsters, mi)
+          table.remove(bullets, bi)
+        end
+      end
+    end
+  end
   --end(stuff that has to be at the end)
   if corn.xv > 50 then
     corn.xv = 50
@@ -160,6 +178,7 @@ function love.update(dt)
   if corn.yv < -50 then
     corn.yv = -50
   end
+  
 end
 
 
@@ -180,6 +199,11 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.circle("fill",bullet.x,bullet.y,14)
   end
+  --monsters
+  for monster, monster in ipairs(monsters) do
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(monster.spr, monster.x, monster.y,0,10,10)
+  end
   
 end
 
@@ -187,6 +211,10 @@ function shoot()
   bullet = {
     x = gun.x, y = gun.y, r = gun.r
   }
-  
   table.insert(bullets, bullet)
+end
+
+function createmon()
+  monster = { x = math.random(0,720), y = math.random(0,520), spr = love.graphics.newImage("art/slime.png") }
+  table.insert(monsters, monster)
 end
