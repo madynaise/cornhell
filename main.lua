@@ -31,6 +31,8 @@ function love.update(dt)
   local dx = mx - gun.x
   local dy = my - gun.y
   
+  
+  
   corn.stop = false
   --corn
   if corn.xv == 0 then
@@ -154,14 +156,47 @@ function love.update(dt)
 
   for mi, monster in ipairs(monsters) do
     for bi, bullet in ipairs(bullets) do
-      if bullet.x + 10 > monster.x and bullet.x - 10 < monster.x + 80 then
-        if bullet.y - 10 > monster.y and bullet.y + 10 < monster.y + 80 then
-          table.remove(monsters, mi)
+      if bullet.x + 20 > monster.x and bullet.x - 20 < monster.x + 80 then
+        if bullet.y + 20 > monster.y and bullet.y - 20 < monster.y + 80 then
+          monster.hp = monster.hp - 1
           table.remove(bullets, bi)
         end
       end
     end
   end
+  
+  for i, monster in ipairs(monsters) do
+    if monster.hp < 1 then
+      table.remove(monsters, i)
+    end
+  end
+  
+  for i, monster in ipairs(monsters) do
+    monster.mdy = (corn.y+40) - monster.y
+    monster.mdx = (corn.x+40) - monster.x
+    monster.r = math.atan2(monster.mdy, monster.mdx) - 3.15
+  end
+  
+  for i, monster in ipairs(monsters) do
+    monster.x = monster.x - math.cos(monster.r) * 100 * dt
+    monster.y = monster.y - math.sin(monster.r) * 100 * dt
+    if monster.x == corn.x and monster.y == corn.y then
+      monster.x = monster.x + math.random(-200,200)
+      monster.y = monster.y + math.random(-200,200)
+    end
+  end
+  
+  for i, monster in ipairs(monsters) do
+    if monster.timer > 0 then
+      monster.timer = monster.timer - dt
+    end
+    if monster.timer <= 0 then
+      monster.timer = 3
+      monster.x = monster.x + math.random(-50,50)
+      monster.y = monster.y + math.random(-50,50)
+    end
+  end
+  
   --end(stuff that has to be at the end)
   if corn.xv > 50 then
     corn.xv = 50
@@ -202,7 +237,7 @@ function love.draw()
   --monsters
   for monster, monster in ipairs(monsters) do
     love.graphics.setColor(1,1,1,1)
-    love.graphics.draw(monster.spr, monster.x, monster.y,0,10,10)
+    love.graphics.draw(monster.spr, monster.x, monster.y,monster.r,10,10,4,4)
   end
   
 end
@@ -215,6 +250,9 @@ function shoot()
 end
 
 function createmon()
-  monster = { x = math.random(0,720), y = math.random(0,520), spr = love.graphics.newImage("art/slime.png") }
+  monster = { x = math.random(0,720), y = math.random(0,520), spr = love.graphics.newImage("art/slime.png"), hp = 2, 
+  r = 0, timer = 3}
+  mdy = corn.y - monster.y
+  mdx = corn.x - monster.x
   table.insert(monsters, monster)
 end
