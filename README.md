@@ -1,4 +1,5 @@
 # cornhell
-lua game using love2d framework
-its the game
-WASD controls, click for gun shoot, uhh other stuff soon
+a game thats mainly made for learning LOVE2D :)
+WASD controls, click for gun shoot, shift for break
+my first real love2d game id say
+well bye :J

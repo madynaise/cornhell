@@ -124,7 +124,8 @@ function love.update(dt)
   end
   
   if corn.health <= 0 then
-    --gonna add death screen
+    dofile("die.lua")
+    love.load()
   end
   
   
@@ -294,9 +295,24 @@ function shoot()
 end
 
 function createmon()
-  monster = { x = math.random(0,720), y = math.random(0,520), spr = love.graphics.newImage("art/slime.png"), hp = 2, 
+  monster = {rndx = math.random(0,2), rndy = math.random(0,2), spr = love.graphics.newImage("art/slime.png"), hp = 2, 
   r = 0, timer = 3, flip = 10}
+  --making monster position
+  if monster.rndx >= 1 then
+    monster.x = math.random(-200,80)
+  else
+    monster.x = math.random(1000,800)
+  end
+  
+  if monster.rndy >= 1 then
+    monster.y = math.random(-200,80)
+  else
+    monster.y = math.random(800,600)
+  end
+  
+
   mdy = corn.y - monster.y
   mdx = corn.x - monster.x
+
   table.insert(monsters, monster)
 end
