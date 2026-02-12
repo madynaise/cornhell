@@ -10,6 +10,11 @@ function love.update()
     loadfile("game.lua")()
     love.load()
   end
+  
+  if love.keyboard.isDown("2") then
+    loadfile("menu.lua")()
+    love.load()
+  end
 end
 
 function love.draw()
@@ -20,4 +25,12 @@ function love.draw()
   love.graphics.setColor(0.9,0.2,0.2,1)
   love.graphics.print("try again",140,240,0,2,2)
   love.graphics.print("press 1",140,300,0,2.5,4)
+  
+  love.graphics.setColor(0.9,0.2,0.2,1)
+  love.graphics.rectangle("fill",500,200,200,200)
+  love.graphics.setColor(0,0,0,1)
+  love.graphics.rectangle("fill",520,220,160,160)
+  love.graphics.setColor(0.9,0.2,0.2,1)
+  love.graphics.print("to menu",540,240,0,2,2)
+  love.graphics.print("press 2",540,300,0,2.5,4)
 end

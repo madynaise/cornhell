@@ -12,7 +12,7 @@ function love.load()
   corn.xv = 0
   corn.yv = 0
   corn.stop = false
-  corn.health = 5
+  corn.health = 99999
   
   gun = {}
   gun.x = corn.x + 90
@@ -24,9 +24,14 @@ function love.load()
   
   monsters = {}
   createmon()
+  monstersounds = {}
+  monstersounds.one = love.audio.newSource("sounds/monster/hit1.wav", "static")
+  monstersounds.two = love.audio.newSource("sounds/monster/hit2.wav", "static")
+  monstersounds.three = love.audio.newSource("sounds/monster/hit3.wav", "static")
   
   timers = {}
   timers.slime = 2
+  timers.heal = 20
 end
 
 
@@ -180,7 +185,21 @@ function love.update(dt)
       if bullet.x + 20 > monster.x-40 and bullet.x - 20 < monster.x + 40 then
         if bullet.y + 20 > monster.y and bullet.y - 20 < monster.y + 80 then
           monster.hp = monster.hp - 1
+          
           table.remove(bullets, bi)
+          
+          --pitch = math.random(0.7,1)
+          monsterrnd = math.random(1,3)
+          
+          if monsterrnd == 1 then
+            monstersounds.one:play()
+          end
+          if monsterrnd == 2 then
+            monstersounds.two:play()
+          end
+          if monsterrnd == 3 then
+            monstersounds.three:play()
+          end
         end
       end
     end

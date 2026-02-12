@@ -28,8 +28,8 @@ function love.draw()
   love.graphics.rectangle("fill",420,220,160,160)
   love.graphics.setColor(0.9,0.9,0.9,1)
   love.graphics.print("quit",440,240,0,2,2)
-  love.graphics.print("press 2",440,300,0,2.5,4)
-  if love.keyboard.isDown("2") then
+  love.graphics.print("press 3",440,300,0,2.5,4)
+  if love.keyboard.isDown("3") then
     love.event.quit()
   end
 end
