@@ -2,7 +2,8 @@ function love.load()
   love.graphics.setDefaultFilter("nearest", "nearest")
   font = love.graphics.newFont("gamefont.ttf")
   love.graphics.setFont(font)
-  love.graphics.setBackgroundColor(0,0,0,1)
+  love.graphics.setBackgroundColor(0.15,0.15,0.15,1)
+  logo = love.graphics.newImage("art/cornhelllogo.png")
 end
 
 function love.update()
@@ -32,6 +33,10 @@ function love.draw()
   if love.keyboard.isDown("3") then
     love.event.quit()
   end
+  
+  love.graphics.draw(logo,200,30,0,0.5,0.5)
+  
+  love.graphics.print("cornhell version 0.1")
 end
 
 function love.keypressed(key)

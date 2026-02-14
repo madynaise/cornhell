@@ -12,7 +12,7 @@ function love.load()
   corn.xv = 0
   corn.yv = 0
   corn.stop = false
-  corn.health = 99999
+  corn.health = 5
   
   gun = {}
   gun.x = corn.x + 90
@@ -21,17 +21,20 @@ function love.load()
   gun.spr = love.graphics.newImage("art/gun.png")
   
   bullets = {}
-  
   monsters = {}
   createmon()
-  monstersounds = {}
-  monstersounds.one = love.audio.newSource("sounds/monster/hit1.wav", "static")
-  monstersounds.two = love.audio.newSource("sounds/monster/hit2.wav", "static")
-  monstersounds.three = love.audio.newSource("sounds/monster/hit3.wav", "static")
+  
+  sounds = {}
+  sounds.one = love.audio.newSource("sounds/monster/hit1.wav", "static")
+  sounds.two = love.audio.newSource("sounds/monster/hit2.wav", "static")
+  sounds.three = love.audio.newSource("sounds/monster/hit3.wav", "static")
+  sounds.corn1 = love.audio.newSource("sounds/hit.wav", "static")
   
   timers = {}
   timers.slime = 2
-  timers.heal = 20
+  timers.heal = 10
+  
+  heals = {}
 end
 
 
@@ -177,6 +180,7 @@ function love.update(dt)
   --monster
   if love.keyboard.isDown("y") then
     createmon()
+    createheal()
   end
   
 
@@ -192,13 +196,13 @@ function love.update(dt)
           monsterrnd = math.random(1,3)
           
           if monsterrnd == 1 then
-            monstersounds.one:play()
+            sounds.one:play()
           end
           if monsterrnd == 2 then
-            monstersounds.two:play()
+            sounds.two:play()
           end
           if monsterrnd == 3 then
-            monstersounds.three:play()
+            sounds.three:play()
           end
         end
       end
@@ -227,6 +231,7 @@ function love.update(dt)
       if monster.y+80 > corn.y and monster.y < corn.y+80 then
         table.remove(monsters,i)
         corn.health = corn.health - 1
+        sounds.corn1:play()
       end
     end
   end
@@ -259,8 +264,23 @@ function love.update(dt)
     end
   end
   
+  --heals
+    for i, heal in ipairs(heals) do
+    if heal.x+70 > corn.x and heal.x < corn.x+70 then
+      if heal.y+70 > corn.y and heal.y < corn.y+70 then
+        table.remove(heals,i)
+        corn.health = corn.health + 1
+      end
+    end
+  end
   
-  
+    if timers.heal > 0 then
+    timers.heal = timers.heal - dt
+  end
+  if timers.heal <= 0 then
+    timers.heal = 5
+    createheal()
+  end
   --end(stuff that has to be at the end)
   if corn.xv > 50 then
     corn.xv = 50
@@ -277,6 +297,11 @@ function love.update(dt)
   if corn.yv < -50 then
     corn.yv = -50
   end
+  
+  if corn.health > 5 then
+    corn.health = 5
+  end
+  
   
 end
 
@@ -302,6 +327,12 @@ function love.draw()
     love.graphics.setColor(1,1,1,1)
     love.graphics.draw(monster.spr, monster.x, monster.y,0,monster.flip,10,4)
     love.graphics.print(monster.hp,monster.x-5,monster.y-35,0,2,2)
+  end
+  
+  --heals
+  for heal, heal in ipairs(heals) do
+    love.graphics.setColor(1,1,1,1)
+    love.graphics.draw(heal.spr,heal.x,heal.y,0,10,10)
   end
   
 end
@@ -334,4 +365,10 @@ function createmon()
   mdx = corn.x - monster.x
 
   table.insert(monsters, monster)
+end
+
+function createheal()
+  heal = {x = math.random(0,720), y = math.random(0,520), spr = love.graphics.newImage("art/heal.png")}
+  
+  table.insert(heals, heal)
 end
