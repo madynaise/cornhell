@@ -33,7 +33,7 @@ function love.load()
   timers = {}
   timers.slime = 2
   timers.heal = 10
-  
+  timers.slimebase = 2
   heals = {}
 end
 
@@ -247,13 +247,17 @@ function love.update(dt)
       monster.y = monster.y + math.random(-50,50)
     end
   end
-  
+
   if timers.slime > 0 then
     timers.slime = timers.slime - dt
   end
   if timers.slime <= 0 then
-    timers.slime = 2
+    timers.slimebase = timers.slimebase*0.95
     createmon()
+    timers.slime = timers.slimebase
+  end
+  if timers.slimebase < 0.75 then
+    timers.slimebase = 0.75
   end
   for i, monster in ipairs(monsters) do
     if monster.x <= corn.x then
